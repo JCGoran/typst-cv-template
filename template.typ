@@ -41,6 +41,17 @@ still need to iron out some details
   )
 }
 
+/* join dictionaries (kind of like Python's {**a, **b}) */
+#let join_dicts(..args) = {
+  let result = (:)
+  for arg in args.pos() {
+    for (key, value) in arg.pairs(){
+      result.insert(key, value)
+    }
+  }
+  result
+}
+
 /* the main configuration */
 #let conf(
   primary_color: none,
@@ -109,11 +120,7 @@ still need to iron out some details
     icons = default_icons
   } else {
     // if the user supplies a custom dictionary, update the default one
-    let old_icons = get_default_icons(color: color)
-    for (key, value) in icons.pairs() {
-      old_icons.insert(key, value)
-    }
-    icons = old_icons
+    icons = join_dicts(get_default_icons(color: color), icons)
   }
   links.pairs().map(
     it => text(
@@ -188,42 +195,39 @@ still need to iron out some details
   )
 }
 
-#let show_line_from_dict(dict, key) = {
-  if dict.at(key, default: none) != none [#dict.at(key) \ ]
-}
-
 /* return text info about a person */
 #let show_details_text(icons: none, separator: none, color: none, details) = {
+  let show_line_from_dict(dict, key) = {
+    if dict.at(key, default: none) != none [#dict.at(key) \ ]
+  }
+
   if separator == none {
     separator = default_separator
   }
+
   if color == none {
     color = default_link_color
   }
+
   if icons == none {
     icons = get_default_icons(color: color)
+  } else {
+    icons = join_dicts(get_default_icons(color: color), icons)
   }
-  align(
-    center + horizon,
-    [
-      #text(
-        size: 14pt,
-        [
-          #details.at("prefix", default: none) #details.firstname #details.lastname
-        ],
-      )\
-      #show_line_from_dict(details, "address")
-      #show_line_from_dict(details, "phonenumber")
-      #text(
-        size: 13pt,
-        fill: color,
-        (link("mailto:" + details.email)[#raw(details.email)]),
-      ) \
-      #if details.at("links", default: none) != none {
-        process_links(details.links, color: color, icons: icons).join(separator)
-      }
-    ],
-  )
+
+  align(center + horizon, [
+    #text(size: 14pt, details.at("name", default: none))\
+    #show_line_from_dict(details, "address")
+    #show_line_from_dict(details, "phonenumber")
+    #text(
+      size: 13pt,
+      fill: color,
+      (link("mailto:" + details.email)[#raw(details.email)]),
+    ) \
+    #if details.at("links", default: none) != none {
+      process_links(details.links, color: color, icons: icons).join(separator)
+    }
+  ])
 }
 
 /* the main info about the person (including picture) */
