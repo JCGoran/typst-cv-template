@@ -19,3 +19,7 @@ Note that as the typst package manager [doesn't support templates yet](https://g
 
 - as typst doesn't support user-defined objects yet, calling the functions in the template requires that the user passes the `color` arguments in case the defaults are changed
 - the image must be modified manually (via some external program) until [this feature](https://github.com/typst/typst/pull/2338) makes it to a typst stable release
+
+## License
+
+MIT
