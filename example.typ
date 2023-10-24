@@ -1,3 +1,4 @@
+// main imports from the template
 #import "template.typ": conf, date, show_skills
 
 // import details about a person as a typst dictionary
@@ -8,11 +9,13 @@
 // don't forget this
 #show: doc => conf(details, doc)
 
+// headers are overloaded via show rules so they appear nicer
 = Work Experience
 
 == Software Engineer #date([Jan 2023 -- present])
 === Company Foo
 
+// so are list items
 - #lorem(100)
 
 == Junior Software Engineer// no date here
@@ -21,6 +24,8 @@
 - #lorem(30)
 - #lorem(10)
 - #lorem(50)
+- #link("https://github.com/JCGoran")[links] have a consistent color with the rest
+  of the document
 
 = Education
 
@@ -30,6 +35,7 @@
 
 = Skills
 
+// `show_skills` takes a dictionary as input and outputs a table-looking item
 #show_skills(
   (
     "Programming Languages": ("Python", "C++", "Rust", "Typst (does that count?)"),
