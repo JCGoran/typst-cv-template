@@ -1,0 +1,19 @@
+# full name (with title or whatever)
+name = "Dr. Foo Bar"
+# phone number (optional)
+phonenumber = "+01 234 56 78"
+# email
+email = "foo@bar.test"
+# physical address (optional)
+address = "123 Greater Foo Bar, Planet Earth"
+# picture (optional)
+picture = "picture.png"
+# footer (optional, evaluatable!)
+footer = "This can be evaluated! The sum `1 + 1` is #(1+1)."
+
+# all links are entirely optional
+[links]
+github = "https://github.com/"
+linkedin = "https://www.linkedin.com/"
+orcid = "https://orcid.org/"
+personal = "https//example.org"
