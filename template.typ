@@ -163,7 +163,13 @@ still need to iron out some details
 }
 
 /* return text info about a person */
-#let show_details_text(icons: none, separator: none, color: none, details) = {
+#let show_details_text(
+  alignment: center + horizon,
+  icons: none,
+  separator: none,
+  color: none,
+  details,
+) = {
   let show_line_from_dict(dict, key) = {
     if dict.at(key, default: none) != none [#dict.at(key) \ ]
   }
@@ -183,7 +189,7 @@ still need to iron out some details
   }
 
   align(
-    center + horizon,
+    alignment,
     [
       #text(size: 14pt, details.at("name", default: none))\
       #show_line_from_dict(details, "address")
@@ -210,7 +216,14 @@ still need to iron out some details
       show_details_text(icons: icons, separator: separator, color: color, details),
     )
   } else {
-    show_details_text(icons: icons, separator: separator, color: color, details)
+    show_details_text(
+      // TODO figure out why the `center + horizon` alignment causes issues
+      alignment: center + top,
+      icons: icons,
+      separator: separator,
+      color: color,
+      details,
+    )
   }
   v(-1em)
 }
@@ -222,6 +235,7 @@ still need to iron out some details
   font: none,
   math_font: none,
   separator: none,
+  list_point: none,
   details,
   doc,
 ) = {
@@ -255,6 +269,10 @@ still need to iron out some details
     )
   }
 
+  if list_point == none {
+    list_point = sym.bullet
+  }
+
   // custom show rules
   show math.equation: set text(font: math_font)
   show heading.where(level: 1): title => grid(
@@ -269,9 +287,7 @@ still need to iron out some details
   )
   show heading.where(level: 2): set text(size: 11pt)
   show heading.where(level: 3): set text(weight: "regular")
-
-  //show heading.where(level: 2): set block(spacing: 0pt)
-
+  show heading.where(level: 2): set block(spacing: 0.7em)
   show heading.where(level: 3): set block(spacing: 0.7em)
 
   show link: set text(fill: primary_color)
@@ -298,7 +314,7 @@ still need to iron out some details
     #eval(details.footer, mode: "markup")
   ]) if details.at("footer", default: "").len() > 0
 
-  set list(indent: 5pt, marker: text(fill: primary_color, sym.bullet))
+  set list(indent: 5pt, marker: text(fill: primary_color, list_point))
 
   show_details(details, color: primary_color)
 
